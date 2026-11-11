@@ -58,7 +58,8 @@ vim.keymap.set("n", "<leader>ug", "<cmd>UsageGraph<cr>", { desc = "Usage graph" 
 ```
 
 The symbol under the cursor is highlighted. An arrow `A -> B` means "B uses A".
-Symbols are grouped by file; hover a node to see its kind and location.
+Symbols are grouped by file. A group shows the file name only; hover it to see
+the full path, and hover a node to see its kind and location.
 
 ## Configuration
 

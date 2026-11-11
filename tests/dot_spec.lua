@@ -40,10 +40,29 @@ end
 return {
   ["every symbol is a node inside its file's cluster"] = function()
     local text = dot.generate(sample())
-    has(text, 'label="src/model.ts";')
-    has(text, 'label="src/api.ts";')
+    has(text, "subgraph cluster_1 {")
     has(text, 'n1 [label="User", tooltip="Class · src/model.ts:1"')
     has(text, 'tooltip="Function · src/api.ts:5"')
+  end,
+
+  ["a cluster shows the file name and keeps the full path for hover"] = function()
+    local pad = ("\194\160"):rep(4)
+    local text = dot.generate(sample())
+    has(text, 'label="' .. pad .. "model.ts" .. pad .. '"; tooltip="src/model.ts";')
+    has(text, 'label="' .. pad .. "api.ts" .. pad .. '"; tooltip="src/api.ts";')
+  end,
+
+  ["files with the same name are told apart by their directories"] = function()
+    local g = { order = {}, nodes = {}, edges = {} }
+    for _, rel in ipairs({ "src/user/index.ts", "src/order/index.ts", "lib/user/index.ts", "src/app.ts" }) do
+      g.order[#g.order + 1] = uri(rel)
+      g.nodes[uri(rel)] = { key = uri(rel), uri = uri(rel), file = true }
+    end
+    local text = dot.generate(g)
+    local pad = ("\194\160"):rep(4)
+    for _, label in ipairs({ "src/user/index.ts", "order/index.ts", "lib/user/index.ts", "app.ts" }) do
+      has(text, 'label="' .. pad .. label .. pad .. '";')
+    end
   end,
 
   ["edges go from the used symbol to its user"] = function()
