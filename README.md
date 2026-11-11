@@ -1,12 +1,24 @@
 # usage-graph.nvim
 
+## Why
+
+Before changing a type, a function or a variable you want to know what the change
+will reach. "Find references" answers that for one level only: it lists the direct
+usages, and following each of them further by hand gets out of control quickly.
+
+Dependency graph tools such as
+[dependency-cruiser](https://github.com/sverweij/dependency-cruiser) are built
+around the opposite question: you point them at a module and they draw what it
+depends on, at the level of files and for JavaScript and TypeScript.
+
+This plugin answers "what depends on this?" instead, for a single symbol and in
+any language that has an LSP server configured in Neovim.
+
+## What it does
+
 Shows everything that depends on the symbol under the cursor: what uses it, what
 uses those users, and so on until nothing is left. The result is a graph rendered
 by Graphviz and opened in the browser.
-
-It is the reverse of a dependency graph: not "what does X depend on" but "what is
-affected if X changes". It works with any language that has an LSP server
-configured in Neovim.
 
 ## Requirements
 
