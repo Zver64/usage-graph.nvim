@@ -157,6 +157,18 @@ return {
     end
   end,
 
+  ["every graph is a new file in Neovim's temp directory"] = function()
+    open_service()
+    local g = await(require("usage-graph").build)
+    local function render(cb)
+      require("usage-graph.render").write(g, cb)
+    end
+    local first, second = await(render), await(render)
+    assert(first ~= second, "the second graph overwrote the first: " .. first)
+    local tmp = vim.fs.dirname(vim.fn.tempname())
+    assert(vim.startswith(first, tmp) and vim.startswith(second, tmp), first .. " is outside " .. tmp)
+  end,
+
   ["reports a buffer without a suitable LSP client"] = function()
     vim.cmd.enew()
     local done, err = false, nil

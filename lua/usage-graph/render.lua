@@ -25,9 +25,8 @@ function M.write(graph, callback)
       end
       local svg = res.stdout:sub(res.stdout:find("<svg", 1, true) or 1)
       local name = graph.nodes[graph.order[1]].name
-      local dir = vim.fs.joinpath(vim.fn.stdpath("cache"), "usage-graph")
-      vim.fn.mkdir(dir, "p")
-      local path = vim.fs.joinpath(dir, (name:gsub("[^%w_.-]", "_")) .. ".html")
+      -- A unique file in Neovim's own temp directory, which it removes on exit.
+      local path = vim.fn.tempname() .. ".html"
       local html = ('<!doctype html>\n<meta charset="utf-8">\n<title>%s — usage graph</title>\n%s'):format(
         escape_html(name),
         svg
